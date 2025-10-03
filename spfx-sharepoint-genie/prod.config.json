@@ -1,0 +1,8 @@
+{
+  "widgetId": "sidebarAgent",
+  "tenantId": "b883cc92-b618-4036-bcbe-3dd4e5c4c7ac",
+  "appClientId": "d1c7bd76-02bf-4c57-b849-43ede45584b9",
+  "adScopes": ["api://a76fed20-34ae-4be6-88f3-b2b9f3ac78f5/access_as_user"],
+  "redirectUri": "https://x2b3m.sharepoint.com",
+  "baseUrl": "http://localhost:8000"
+}

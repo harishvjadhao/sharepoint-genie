@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="SidebarAgent"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ClientSideComponentId="4c6e29f2-7eee-4f9f-bbd2-20c8859d0ba2"
+        ClientSideComponentProperties="{
+            &quot;appClientId&quot;: &quot;d1c7bd76-02bf-4c57-b849-43ede45584b9&quot;,
+            &quot;tenantId&quot;: &quot;b883cc92-b618-4036-bcbe-3dd4e5c4c7ac&quot;,
+            &quot;environmentId&quot;: &quot;YOUR_ENVIRONMENT_ID&quot;,
+            &quot;agentIdentifier&quot;: &quot;YOUR_AGENT_IDENTIFIER&quot;,
+            &quot;directConnectUrl&quot;: &quot;YOUR_DIRECT_CONNECT_URL&quot;,
+            &quot;showTyping&quot;: true,
+            &quot;headerBackgroundColor&quot;: &quot;white&quot;,
+            &quot;agentTitle&quot;: &quot;SharePoint Genie&quot;
+        }">
+    </CustomAction>
+</Elements>
