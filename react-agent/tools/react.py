@@ -297,10 +297,10 @@ def summarize_file(drive_id: str, file_name: str) -> Dict[str, Any]:
 
         embeddings = AzureOpenAIEmbeddings()
         vectorstore = FAISS.from_documents(docs, embeddings)
-        vectorstore.save_local("faiss_index")
+        vectorstore.save_local(f"faiss_index_{file_name}")
 
         new_vectorstore = FAISS.load_local(
-            "faiss_index", embeddings, allow_dangerous_deserialization=True
+            f"faiss_index_{file_name}", embeddings, allow_dangerous_deserialization=True
         )
         retrieval_qa_chat_prompt = PromptTemplate.from_template(
             template,
@@ -326,6 +326,13 @@ def summarize_file(drive_id: str, file_name: str) -> Dict[str, Any]:
 
     except Exception as e:
         return {"error": str(e)}
+    finally:
+        # Clean up resources, if any, cleanup vector store files
+        index_name = f"faiss_index_{file_name}"
+        if os.path.exists(index_name):
+            for file in os.listdir(index_name):
+                os.remove(os.path.join(index_name, file))
+            os.rmdir(index_name)
 
 
 @tool
