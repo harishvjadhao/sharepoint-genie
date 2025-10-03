@@ -34,6 +34,7 @@ bearer_scheme = HTTPBearer(auto_error=False)
 
 class InitSessionRequest(BaseModel):
     siteUrl: str
+    userName: str
 
 
 class InitSessionResponse(BaseModel):
@@ -94,6 +95,7 @@ def init_session(
     ctx_payload = {
         "SITE_URL": req.siteUrl,
         "SITE_ID": site.site_id,
+        "USER_NAME": req.userName,
         "USER_ASSERTION": header_token,
         "ACCESS_TOKEN": token.access_token,
         "OBO_ACCESS_TOKEN": token.obo_access_token,
@@ -111,7 +113,7 @@ def chat(
 ):
     if req.sessionId not in SESSIONS:
         raise HTTPException(status_code=404, detail="Invalid sessionId")
-    
+
     # Derive user_assertion: body value wins; fallback to Authorization header if present
     header_token = None
     if credentials and credentials.scheme.lower() == "bearer":
@@ -123,7 +125,9 @@ def chat(
     # Check if header_token matches session's USER_ASSERTION
     session_user_assertion = session_ctx.get("USER_ASSERTION")
     if session_user_assertion and header_token != session_user_assertion:
-        raise HTTPException(status_code=401, detail="Session terminated: token mismatch")
+        raise HTTPException(
+            status_code=401, detail="Session terminated: token mismatch"
+        )
 
     # Apply per-session context before invoke
     clear_context()

@@ -9,12 +9,7 @@
         "4c6e29f2-7eee-4f9f-bbd2-20c8859d0ba2": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
-            "appClientId": "d1c7bd76-02bf-4c57-b849-43ede45584b9",
-            "tenantId": "b883cc92-b618-4036-bcbe-3dd4e5c4c7ac",
-            "environmentId": "ENV-ID",
-            "agentIdentifier": "AGENT-ID",
-            "directConnectUrl": "YOUR-DIRECT-CONNECT-URL",
-            "showTyping": true
+            "directConnectUrl": "http://localhost:8000"
           }
         }
       }
@@ -25,12 +20,7 @@
         "4c6e29f2-7eee-4f9f-bbd2-20c8859d0ba2": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
-            "appClientId": "d1c7bd76-02bf-4c57-b849-43ede45584b9",
-            "tenantId": "b883cc92-b618-4036-bcbe-3dd4e5c4c7ac",
-            "environmentId": "ENV-ID",
-            "agentIdentifier": "AGENT-ID",
-            "directConnectUrl": "YOUR-DIRECT-CONNECT-URL",
-            "showTyping": true
+            "directConnectUrl": "http://localhost:8000"
           }
         }
       }

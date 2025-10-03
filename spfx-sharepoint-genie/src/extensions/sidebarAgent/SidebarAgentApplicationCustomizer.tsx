@@ -12,9 +12,11 @@ import SidePanel from "./components/SidePanel/SidePanel";
 import {
   ISidebarAgentApplicationCustomizerProperties,
   ISidebarAgentState,
+  IWebpartSpecificProps,
 } from "./models/ISidebarAgentProperties";
 
 const LOG_SOURCE: string = "SidebarAgentApplicationCustomizer";
+declare const APP_CONFIG: IWebpartSpecificProps;
 
 class SidebarAgentComponent extends React.Component<
   {
@@ -31,7 +33,11 @@ class SidebarAgentComponent extends React.Component<
     const user = props.context?.pageContext?.user;
     this.state = {
       isPanelOpen: false,
-      currentUserLogin: user ? user.loginName || user.email : undefined,
+      currentUserLogin: user && {
+        email: user.email,
+        displayName: user.displayName,
+        loginName: user.loginName || user.email,
+      },
       chatKey: 0,
     };
   }
@@ -62,21 +68,19 @@ class SidebarAgentComponent extends React.Component<
 
   public render(): React.ReactElement {
     const { isPanelOpen } = this.state;
-    const { properties } = this.props;
 
-    const headerColor = properties.headerBackgroundColor || "white";
+    const headerColor = APP_CONFIG.headerBackgroundColor || "white";
     const agentTitle =
-      properties.agentTitle ||
-      "SharePoint Genie" ||
+      APP_CONFIG.agentTitle ||
       `${this.props.context.pageContext.web.title} Agent` ||
       "Copilot Studio Agent";
-    properties.agentTitle = agentTitle; // Ensure agentTitle is set in properties for SidePanel
 
     const hasRequiredProps =
-      properties.appClientId &&
-      properties.tenantId &&
-      (properties.directConnectUrl ||
-        (properties.agentIdentifier && properties.environmentId));
+      APP_CONFIG.appClientId &&
+      APP_CONFIG.tenantId &&
+      APP_CONFIG.adScopes &&
+      APP_CONFIG.redirectUri &&
+      APP_CONFIG.directConnectUrl;
 
     if (!hasRequiredProps) {
       return (
@@ -135,7 +139,7 @@ class SidebarAgentComponent extends React.Component<
 
         <SidePanel
           isOpen={isPanelOpen}
-          properties={properties}
+          properties={APP_CONFIG}
           currentUserLogin={this.state.currentUserLogin}
           baseUrl={this._getBaseUrl()}
           onDismiss={this._onPanelDismiss}
@@ -228,7 +232,7 @@ export default class SidebarAgentApplicationCustomizer extends BaseApplicationCu
   public onInit(): Promise<void> {
     Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
 
-    if (!this.properties.appClientId || !this.properties.tenantId) {
+    if (!APP_CONFIG.appClientId || !APP_CONFIG.tenantId) {
       Log.error(
         LOG_SOURCE,
         new Error("appClientId and tenantId are required properties.")
@@ -238,18 +242,13 @@ export default class SidebarAgentApplicationCustomizer extends BaseApplicationCu
       );
     }
 
-    if (
-      !this.properties.directConnectUrl &&
-      (!this.properties.agentIdentifier || !this.properties.environmentId)
-    ) {
+    if (!APP_CONFIG.directConnectUrl) {
       Log.error(
         LOG_SOURCE,
-        new Error(
-          "Either directConnectUrl OR both agentIdentifier and environmentId must be provided."
-        )
+        new Error("Either directConnectUrl must be provided.")
       );
       return Promise.reject(
-        "Missing required properties: Either provide directConnectUrl OR both agentIdentifier and environmentId"
+        "Missing required properties: provide directConnectUrl"
       );
     }
 

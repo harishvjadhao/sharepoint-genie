@@ -8,11 +8,12 @@ import remarkGfm from "remark-gfm";
 import styles from "./Chat.module.scss";
 import { initSession } from "../../services/initSession";
 import { chat } from "../../services/chat";
+import { IUser } from "../../models/ISidebarAgentProperties";
 
 export interface IChatProps {
   showTyping?: boolean;
-  currentUserLogin?: string;
-  baseUrl?: string; // Add this line
+  currentUserLogin: IUser;
+  baseUrl: string;
 }
 
 interface Message {
@@ -62,10 +63,7 @@ const Chat: React.FC<IChatProps> = ({
 
     const init = async () => {
       try {
-        const session = await initSession(
-          baseUrl || "",
-          currentUserLogin || ""
-        );
+        const session = await initSession(baseUrl, currentUserLogin);
         if (!session && isMounted) {
           setError("Session not initialized.");
           setSessionInitializing(false);
@@ -116,15 +114,12 @@ const Chat: React.FC<IChatProps> = ({
 
     try {
       const response = await chat(
-        sessionId || "",
+        sessionId,
         input.trim(),
-        currentUserLogin || ""
+        currentUserLogin.loginName
       );
-
       console.log("Response from custom chat service:", response);
 
-      // const content =
-      //   response.choices[0]?.message?.content || "No response from service.";
       const content = response.reply || "No response from service.";
       const botMessage: Message = { role: "assistant", content };
       setMessages((prev) => [...prev, botMessage]);
@@ -198,7 +193,9 @@ const Chat: React.FC<IChatProps> = ({
           }`}
           aria-hidden="true"
         >
-          {isUser ? currentUserLogin?.[0]?.toUpperCase() || "U" : "Ge"}
+          {isUser
+            ? currentUserLogin.loginName?.[0]?.toUpperCase() || "U"
+            : "Ge"}
         </div>
         <div className={`${styles.bubble} ${isUser ? styles.userBubble : ""}`}>
           {isUser ? (

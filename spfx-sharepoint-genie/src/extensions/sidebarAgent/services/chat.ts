@@ -9,7 +9,7 @@ export async function chat(
 ): Promise<any> {
   const token = await acquireToken(APP_CONFIG, user);
 
-  const response = await fetch(`${APP_CONFIG.baseUrl}/chat`, {
+  const response = await fetch(`${APP_CONFIG.directConnectUrl}/chat`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,

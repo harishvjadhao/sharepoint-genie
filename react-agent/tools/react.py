@@ -46,13 +46,6 @@ def _init_sharepoint_client() -> SharePointClient:
 
 
 @tool
-def human_assistance(query: str) -> str:
-    """Request assistance from a human."""
-    human_response = interrupt({"query": query})
-    return human_response["data"]
-
-
-@tool
 def get_one_drive_id() -> str:
     """
     Returns the unique ID of the current user's OneDrive drive.
@@ -363,7 +356,6 @@ def update_file_metadata(
 
 
 tools = [
-    human_assistance,
     get_one_drive_id,
     get_drive_id,
     get_folder_id,

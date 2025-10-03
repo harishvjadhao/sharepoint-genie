@@ -7,6 +7,7 @@ _ctx: ContextVar[Dict[str, Any]] = ContextVar("sharepoint_context", default={})
 CONFIG_KEYS = [
     "SITE_URL",
     "SITE_ID",
+    "USER_NAME",
     "USER_ASSERTION",
     "ACCESS_TOKEN",
     "OBO_ACCESS_TOKEN",
